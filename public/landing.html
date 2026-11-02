@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDUPULSE - Student Management, Reimagined</title>
+    <meta
+      name="description"
+      content="EDUPULSE is a modern student management platform: records, marks analytics and CSV export in one place."
+    />
+    <link rel="stylesheet" href="landing.css" />
+    <script defer src="landing.js"></script>
+  </head>
+  <body>
+    <canvas id="bg" aria-hidden="true"></canvas>
+
+    <header class="top">
+      <a class="brand" href="/"><span class="dot"></span>EDUPULSE</a>
+      <nav class="links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#about">About</a>
+      </nav>
+      <button id="loginBtn" class="btn btn-glow" type="button">Login</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Student management, reimagined</p>
+        <h1>Every student. Every mark.<br /><span class="grad">One pulse.</span></h1>
+        <p class="lead">
+          EDUPULSE keeps student records, marks and performance analytics in one fast,
+          secure workspace &mdash; built for teachers, open to students.
+        </p>
+        <div class="cta">
+          <button id="heroLogin" class="btn btn-glow" type="button">Get started</button>
+          <a class="btn btn-ghost" href="#features">Explore features</a>
+        </div>
+        <ul class="stats">
+          <li><b>2</b><span>Dedicated portals</span></li>
+          <li><b>Live</b><span>Marks analytics</span></li>
+          <li><b>1-click</b><span>CSV export</span></li>
+        </ul>
+      </section>
+
+      <section id="features" class="section">
+        <h2>Everything in one place</h2>
+        <p class="sub">A complete toolkit for running student records day to day.</p>
+        <div class="grid">
+          <article class="card"><i>＋</i><h3>Add students</h3><p>Register roll number, name, age, marks and a profile photo in seconds.</p></article>
+          <article class="card"><i>☰</i><h3>Browse records</h3><p>Searchable list of every student with a detailed profile view.</p></article>
+          <article class="card"><i>✎</i><h3>Edit &amp; delete</h3><p>Keep records accurate: update details or remove entries safely.</p></article>
+          <article class="card"><i>◔</i><h3>Analytics dashboard</h3><p>Marks distribution and ranking charts that update with your data.</p></article>
+          <article class="card"><i>⇩</i><h3>CSV export</h3><p>Download the full student list for reports and spreadsheets.</p></article>
+          <article class="card"><i>⛨</i><h3>Role-based access</h3><p>Teachers manage everything. Students get read-only access.</p></article>
+        </div>
+      </section>
+
+      <section id="how" class="section">
+        <h2>How it works</h2>
+        <div class="steps">
+          <div class="step"><span>1</span><h3>Choose your portal</h3><p>Click <b>Login</b> and pick Teacher or Student.</p></div>
+          <div class="step"><span>2</span><h3>Sign in securely</h3><p>Sessions are signed, expire automatically, and are checked on every request.</p></div>
+          <div class="step"><span>3</span><h3>Get to work</h3><p>Teachers manage records. Students explore data and analytics.</p></div>
+        </div>
+      </section>
+
+      <section id="about" class="section about">
+        <h2>About EDUPULSE</h2>
+        <p>
+          EDUPULSE is a Node.js, Express and MySQL application that runs anywhere Docker does.
+          Public information lives on this page; student data is only available after you sign in.
+        </p>
+      </section>
+    </main>
+
+    <footer>&copy; <span id="year"></span> EDUPULSE &middot; Student Management System</footer>
+
+    <div id="modal" class="modal" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+        <button class="close" id="mClose" type="button" aria-label="Close">&times;</button>
+        <h2 id="mTitle">Login as</h2>
+        <p class="sub">Choose your portal to continue</p>
+        <div class="choices">
+          <a class="choice" href="login.html?role=teacher">
+            <span class="ico">🎓</span><b>Teacher</b>
+            <small>Add, edit, delete, export and analyse student data</small>
+          </a>
+          <a class="choice" href="login.html?role=student">
+            <span class="ico">📘</span><b>Student</b>
+            <small>View student records and the analytics dashboard</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

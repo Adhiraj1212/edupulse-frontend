@@ -1,0 +1,8 @@
+failure-threshold: warning
+trustedRegistries:
+  - docker.io
+  - public.ecr.aws
+  - gcr.io
+ignored:
+  - DL3018   # apk add version pinning
+  - DL3017   # apk upgrade: deliberate for patching CVEs in base images

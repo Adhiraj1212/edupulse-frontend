@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDUPULSE - Student Portal</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", system-ui, sans-serif; }
+      body { min-height: 100vh; background: #05060f; color: #e8ecff; }
+      header {
+        display: flex; align-items: center; gap: 20px; padding: 16px 5vw;
+        background: rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .brand { font-weight: 800; letter-spacing: 0.18em; margin-right: auto; }
+      header a, header button {
+        color: #e8ecff; text-decoration: none; background: none; border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 18px; border-radius: 999px; cursor: pointer; font-size: 1rem;
+      }
+      header a:hover, header button:hover { border-color: #22d3ee; }
+      main { max-width: 1000px; margin: 40px auto; padding: 0 5vw; }
+      h1 { margin-bottom: 4px; }
+      .badge { color: #22d3ee; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }
+      .sub { color: #98a2c9; margin-bottom: 24px; }
+      input {
+        width: 100%; max-width: 360px; padding: 10px 14px; margin-bottom: 20px; color: inherit;
+        background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px; font-size: 1rem; outline: none;
+      }
+      input:focus { border-color: #22d3ee; }
+      table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.04); border-radius: 12px; overflow: hidden; }
+      th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+      th { background: rgba(139, 92, 246, 0.2); }
+      td img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-right: 10px; }
+      .empty { text-align: center; color: #98a2c9; padding: 28px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="brand">EDUPULSE</span>
+      <a href="dashboard.html">Analytics dashboard</a>
+      <button id="logout" type="button">Logout</button>
+    </header>
+    <main>
+      <p class="badge">Student portal &middot; read-only</p>
+      <h1>Student records</h1>
+      <p class="sub" id="count">Loading&hellip;</p>
+      <input id="search" type="search" placeholder="Search by name or roll number" />
+      <table>
+        <thead><tr><th>Roll no</th><th>Name</th><th>Age</th><th>Marks</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </main>
+    <script>
+      const FALLBACK = "https://icon-library.com/images/profile-icon-images/profile-icon-images-14.jpg";
+      const rows = document.getElementById("rows");
+      let students = [];
+
+      function cell(text) {
+        const td = document.createElement("td");
+        td.textContent = text;
+        return td;
+      }
+
+      function render() {
+        const q = document.getElementById("search").value.trim().toLowerCase();
+        const list = students.filter(
+          (s) => s.name.toLowerCase().includes(q) || String(s.roll_no).includes(q)
+        );
+        rows.replaceChildren();
+        if (!list.length) {
+          const td = cell("No students found");
+          td.colSpan = 4;
+          td.className = "empty";
+          rows.appendChild(document.createElement("tr")).appendChild(td);
+        }
+        for (const s of list) {
+          const tr = document.createElement("tr");
+          tr.appendChild(cell(s.roll_no));
+          const name = document.createElement("td");
+          const img = document.createElement("img");
+          img.src = s.image_url || FALLBACK;
+          img.alt = "";
+          img.onerror = () => (img.src = FALLBACK);
+          name.append(img, s.name);
+          tr.append(name, cell(s.age), cell(s.marks));
+          rows.appendChild(tr);
+        }
+        document.getElementById("count").textContent =
+          `${list.length} of ${students.length} students`;
+      }
+
+      fetch("/api/studdetails")
+        .then((r) => {
+          if (r.status === 401) return (location.href = "/login.html?role=student");
+          return r.json();
+        })
+        .then((data) => {
+          students = data || [];
+          render();
+        })
+        .catch(() => (document.getElementById("count").textContent = "Could not load students"));
+
+      document.getElementById("search").addEventListener("input", render);
+      document.getElementById("logout").addEventListener("click", async () => {
+        await fetch("/api/logout", { method: "POST" });
+        location.href = "/";
+      });
+    </script>
+  </body>
+</html>

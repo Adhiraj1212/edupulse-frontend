@@ -1,0 +1,9 @@
+.git
+.github
+.gitignore
+.dockerignore
+.gitleaks.toml
+.hadolint.yaml
+README.md
+docker-compose.yml
+.DS_Store

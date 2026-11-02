@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDUPULSE - Login</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <form id="loginForm" class="login">
+      <h2 id="title">EDUPULSE</h2>
+      <p id="subtitle">Sign in to continue</p>
+      <label for="username">Username</label>
+      <input type="text" id="username" autocomplete="username" required autofocus />
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required />
+      <button type="submit" id="loginBtn">Login</button>
+      <div id="loginError"></div>
+      <a class="back" href="/">&larr; Back to home</a>
+    </form>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const role = params.get("role") === "student" ? "student" : "teacher";
+      const portal = { teacher: "/home.html", student: "/student-portal.html" };
+
+      document.getElementById("title").textContent =
+        role === "student" ? "Student Login" : "Teacher Login";
+      document.getElementById("subtitle").textContent =
+        role === "student"
+          ? "View student records and analytics"
+          : "Manage students, marks and records";
+      document.title = "EDUPULSE - " + document.getElementById("title").textContent;
+
+      document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("loginBtn");
+        const err = document.getElementById("loginError");
+        btn.disabled = true;
+        err.textContent = "";
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              role,
+              username: document.getElementById("username").value,
+              password: document.getElementById("password").value,
+            }),
+          });
+          if (res.ok) return (window.location.href = portal[role]);
+          err.textContent = (await res.json()).message || "Login failed";
+        } catch (e) {
+          err.textContent = "Server unreachable";
+        }
+        btn.disabled = false;
+      });
+    </script>
+  </body>
+</html>
