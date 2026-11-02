@@ -123,3 +123,4 @@ case "${cmd}" in
     "task_${cmd//-/_}" "$@" ;;
   *) usage >&2; die "unknown command: ${cmd}" ;;
 esac
+

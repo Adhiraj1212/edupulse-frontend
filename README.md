@@ -32,3 +32,4 @@ docker compose up --build
 ```
 
 Access the frontend at `http://localhost:8080`.
+

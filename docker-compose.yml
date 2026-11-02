@@ -13,3 +13,4 @@ services:
       TRUSTED_PROXY_CIDR: "127.0.0.1/32"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
