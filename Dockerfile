@@ -6,9 +6,9 @@ ENV DNS_RESOLVER=127.0.0.11 \
 
 USER root
 RUN mkdir -p /etc/nginx/upstreams && \
-    printf 'upstream auth_upstream { server auth-service-blue:4000; }\n' > /etc/nginx/upstreams/auth-service.conf && \
-    printf 'upstream backend_upstream { server backend-blue:5000; }\n' > /etc/nginx/upstreams/backend.conf && \
-    printf 'upstream audit_upstream { server audit-service-blue:6000; }\n' > /etc/nginx/upstreams/audit-service.conf && \
+    printf 'upstream auth_upstream { server 127.0.0.1:4000; }\n' > /etc/nginx/upstreams/auth-service.conf && \
+    printf 'upstream backend_upstream { server 127.0.0.1:5000; }\n' > /etc/nginx/upstreams/backend.conf && \
+    printf 'upstream audit_upstream { server 127.0.0.1:6000; }\n' > /etc/nginx/upstreams/audit-service.conf && \
     chown -R 101:101 /etc/nginx/upstreams
 USER 101
 
