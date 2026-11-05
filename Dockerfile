@@ -1,13 +1,16 @@
 FROM nginxinc/nginx-unprivileged:1.27-alpine
 
-# Upstreams are resolved at request time (see nginx.conf.template), so these can be
-# ECS Service Connect / Cloud Map / internal ALB names. Override per environment.
-ENV AUTH_UPSTREAM=auth-service:4000 \
-    BACKEND_UPSTREAM=backend:5000 \
-    AUDIT_UPSTREAM=audit-service:6000 \
-    DNS_RESOLVER=127.0.0.11 \
-    TRUSTED_PROXY_CIDR=10.0.0.0/8 \
-    NGINX_ENVSUBST_FILTER='^(AUTH_UPSTREAM|BACKEND_UPSTREAM|AUDIT_UPSTREAM|DNS_RESOLVER|TRUSTED_PROXY_CIDR)$'
+ENV DNS_RESOLVER=127.0.0.11 \
+    TRUSTED_PROXY_CIDR=0.0.0.0/0 \
+    NGINX_ENVSUBST_FILTER='^(DNS_RESOLVER|TRUSTED_PROXY_CIDR)$'
+
+USER root
+RUN mkdir -p /etc/nginx/upstreams && \
+    printf 'upstream auth_upstream { server auth-service-blue:4000; }\n' > /etc/nginx/upstreams/auth-service.conf && \
+    printf 'upstream backend_upstream { server backend-blue:5000; }\n' > /etc/nginx/upstreams/backend.conf && \
+    printf 'upstream audit_upstream { server audit-service-blue:6000; }\n' > /etc/nginx/upstreams/audit-service.conf && \
+    chown -R 101:101 /etc/nginx/upstreams
+USER 101
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY snippets /etc/nginx/snippets
